@@ -1,3 +1,5 @@
+import { renderVMLab } from './vm-lab.mjs?v=20261003-vm';
+
 const lessons = [
   {
     id: 'mental-model', number: '01', icon: '◫', title: 'ภาพใหญ่ของ Docker', subtitle: 'Image, container และ Docker Engine ต่างกันอย่างไร', time: '8 นาที', level: 'เริ่มต้น',
@@ -112,7 +114,7 @@ const lessonHref = (lesson) => `#${lesson.id}`;
 
 function renderNav() {
   const current = location.hash.slice(1) || 'home';
-  $('#lesson-nav').innerHTML = lessons.map((lesson) => `<a href="${lessonHref(lesson)}" class="nav-link ${current === lesson.id ? 'active' : ''}" ${current === lesson.id ? 'aria-current="page"' : ''}><span class="nav-number">${lesson.number}</span><span class="nav-title">${lesson.title}</span><span class="nav-complete">${state.completed.includes(lesson.id) ? '✓' : ''}</span></a>`).join('');
+  $('#lesson-nav').innerHTML = lessons.map((lesson) => `<a href="${lessonHref(lesson)}" class="nav-link ${current === lesson.id ? 'active' : ''}" ${current === lesson.id ? 'aria-current="page"' : ''}><span class="nav-number">${lesson.number}</span><span class="nav-title">${lesson.title}</span><span class="nav-complete">${state.completed.includes(lesson.id) ? '✓' : ''}</span></a>`).join('') + `<a href="#vm" class="nav-link vm-nav-link ${current === 'vm' ? 'active' : ''}" ${current === 'vm' ? 'aria-current="page"' : ''}><span class="nav-number">⌘</span><span class="nav-title">VM Lab</span><span class="nav-complete">↗</span></a>`;
   $('#progress-count').textContent = `${state.completed.length} / ${lessons.length}`;
   $('#progress-fill').style.width = `${(state.completed.length / lessons.length) * 100}%`;
   $('.progress-track').setAttribute('aria-valuenow', String(state.completed.length));
@@ -127,7 +129,7 @@ function renderHome() {
         <div class="hero-visual" aria-label="ภาพอธิบาย Dockerfile สร้าง image และเริ่ม container"><div class="visual-top"><span class="visual-signal"></span> HOW DOCKER WORKS <span>● ● ●</span></div><div class="visual-flow"><div class="flow-node file-node"><span class="node-icon">{ }</span><small>01 / RECIPE</small><strong>Dockerfile</strong><span>FROM nginx:alpine</span></div><div class="flow-arrow">→</div><div class="flow-node image-node"><span class="node-icon">▤</span><small>02 / PACKAGE</small><strong>Image</strong><span>immutable layers</span></div><div class="flow-arrow">→</div><div class="flow-node container-node"><span class="node-icon">▣</span><small>03 / PROCESS</small><strong>Container</strong><span><i class="live-dot"></i> running</span></div></div><div class="visual-console"><span>$ docker run -d nginx:alpine</span><span class="console-result">✓ Container is running</span></div></div>
       </section>
       <section class="roadmap" id="roadmap"><div class="section-heading"><div><span class="section-kicker">THE LEARNING PATH</span><h2>จากภาพใหญ่ <em>ไปถึงใช้งานจริง</em></h2></div><p>เริ่มที่พื้นฐาน แล้วค่อยต่อเป็น workflow ที่ใช้ในโปรเจกต์จริง แต่ละบทมีคำถามตรวจความเข้าใจ</p></div><div class="roadmap-grid">${lessons.map((lesson) => `<a class="roadmap-item" href="${lessonHref(lesson)}"><div class="roadmap-item-top"><span>${lesson.number} <span class="roadmap-icon">${lesson.icon}</span></span><span class="roadmap-status">${state.completed.includes(lesson.id) ? 'เรียนแล้ว ✓' : lesson.time}</span></div><h3>${lesson.title}</h3><p>${lesson.subtitle}</p><span class="roadmap-arrow">↗</span></a>`).join('')}</div></section>
-      <section class="bottom-banner"><div><span>READY TO BUILD?</span><h2>รันคำสั่งแรกโดยไม่ต้องติดตั้ง Docker</h2><p>Terminal ในบทที่ 2 เป็นตัวจำลองที่ปลอดภัยและเริ่มใหม่ได้ทุกเมื่อ</p></div><a class="primary-button light" href="#cli">เปิด Terminal Lab ↗</a></section>
+      <section class="bottom-banner"><div><span>READY TO BUILD?</span><h2>ลองฝึกใน VM Lab</h2><p>แก้ไฟล์ สร้าง image เริ่ม container และทดสอบเว็บในเครื่องจำลองที่จำสถานะไว้</p></div><a class="primary-button light" href="#vm">เปิด VM Lab ↗</a></section>
     </div>`;
 }
 
@@ -224,6 +226,7 @@ function render() {
   const lesson = lessons.find((item) => item.id === route);
   renderNav();
   if (lesson) { renderLesson(lesson); updateLab(lesson.lab); }
+  else if (route === 'vm') renderVMLab($('#main'));
   else if (route === 'sources') renderSources();
   else renderHome();
   window.scrollTo({ top: 0, behavior: 'instant' });

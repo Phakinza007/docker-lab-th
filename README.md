@@ -9,12 +9,18 @@
 - ทดลองข้อมูลใน writable layer เทียบกับ named volume
 - แบบทดสอบท้ายบทและบันทึกความคืบหน้าใน `localStorage`
 - เนื้อหา 7 บท พร้อมลิงก์เอกสาร Docker ทางการ
+- VM Lab จำลอง shell, ระบบไฟล์, การ build image, container, logs, port, Compose และ shell ภายใน container
+- แก้ Dockerfile กับหน้าเว็บ แล้วดูผลในพรีวิวจำลองได้ สถานะบันทึกใน `localStorage` และรีเซ็ตได้
 
-ตัวจำลองแสดงผลเพื่อการเรียนรู้เท่านั้น ไม่รัน container จริง คำสั่งบางตัวจำลองเฉพาะรูปแบบที่ระบุในบทเรียน
+VM Lab เปิดที่ [หน้า VM Lab](https://phakinza007.github.io/docker-lab-th/#vm) ภารกิจแนะนำเริ่มจาก `ls` → แก้ Dockerfile → `docker build -t my-site:1.0 .` → `docker run -d --name web -p 8080:80 my-site:1.0` → `curl localhost:8080`
+
+ตัวจำลองแสดงผลเพื่อการเรียนรู้เท่านั้น ไม่รัน Linux VM, Docker Engine หรือ container จริง คำสั่งจำลองเฉพาะรูปแบบที่ระบุใน Lab และข้อมูลอยู่ในเบราว์เซอร์ของผู้เรียน
 
 ## เปิดในเครื่อง
 
 รัน local static server เช่น `python3 -m http.server 8000` แล้วเปิด `http://localhost:8000`
+
+ตรวจตรรกะ VM Lab ด้วย `node --test tests/vm-engine.test.mjs`
 
 ## Deploy
 
