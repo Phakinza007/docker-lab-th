@@ -14,7 +14,7 @@
 
 ## เปิดในเครื่อง
 
-เปิด `index.html` โดยตรง หรือรัน local static server เช่น `python3 -m http.server 8000` แล้วเปิด `http://localhost:8000` 
+รัน local static server เช่น `python3 -m http.server 8000` แล้วเปิด `http://localhost:8000`
 
 ## Deploy
 
