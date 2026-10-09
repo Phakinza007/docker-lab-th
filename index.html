@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b1522" />
+    <script>try{const mode=localStorage.getItem('dockerlab-theme');document.documentElement.dataset.theme=mode==='dark'||mode==='light'?mode:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch{document.documentElement.dataset.theme='light'}</script>
     <meta name="description" content="เรียน Docker แบบลงมือทำ ตั้งแต่ image และ container ไปจนถึง Dockerfile, volumes, Compose และ workflow ปัจจุบัน" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20261003-vm" />
-    <link rel="stylesheet" href="./vm-lab.css?v=20261003-vm" />
+    <link rel="stylesheet" href="./styles.css?v=20261009-workspace" />
+    <link rel="stylesheet" href="./vm-lab.css?v=20261009-workspace" />
+    <link rel="stylesheet" href="./vm-features.css?v=20261009-workspace" />
     <title>Docker Lab — เรียน Docker แบบลงมือทำ</title>
   </head>
   <body>
@@ -31,14 +33,15 @@
         <header class="topbar">
           <button class="menu-button" id="menu-button" type="button" aria-label="เปิดสารบัญ" aria-expanded="false">☰</button>
           <span class="topbar-label">INTERACTIVE COURSE <span class="topbar-separator">/</span> ภาษาไทย</span>
-          <div class="topbar-right"><a href="https://knowledge-web-one.vercel.app/practice#int134">Knowledge Web</a><button type="button" id="export-progress">ส่งออกงาน</button><span class="status-dot"></span> อัปเดต 3 ต.ค. 2026 <a href="#sources">แหล่งอ้างอิง ↗</a></div>
+          <div class="topbar-right"><button type="button" id="theme-toggle" aria-label="เปลี่ยนธีม" aria-pressed="false">ธีมมืด</button><a href="https://knowledge-web-one.vercel.app/practice#int134">Knowledge Web</a><button type="button" id="export-progress">ส่งออกงาน</button><span class="status-dot"></span> อัปเดต 9 ต.ค. 2026 <a href="#sources">แหล่งอ้างอิง ↗</a></div>
         </header>
         <main id="main" tabindex="-1"></main>
         <footer class="footer"><span>Docker Lab · เรียนรู้ในเบราว์เซอร์</span><span>ตัวจำลองไม่เชื่อมต่อ Docker Engine จริง</span></footer>
       </div>
     </div>
     <div class="sidebar-scrim" id="sidebar-scrim" hidden></div>
-    <script type="module" src="./app.js?v=20261003-vm"></script>
-  <script type="module" src="./export-progress.js"></script>
+    <script type="module" src="./app.js?v=20261009-workspace"></script>
+  <script type="module" src="./export-progress.js?v=20261009-complete"></script>
+  <script type="module" src="./ui-preferences.mjs"></script>
 </body>
 </html>

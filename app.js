@@ -1,4 +1,5 @@
-import { renderVMLab } from './vm-lab.mjs?v=20261003-vm';
+import { renderVMLab } from './vm-lab.mjs?v=20261009-lab';
+import { renderProject, renderTroubleshooting, lessonProjectLink, renderLessonHints } from './curriculum.mjs';
 
 const lessons = [
   {
@@ -115,6 +116,7 @@ const lessonHref = (lesson) => `#${lesson.id}`;
 function renderNav() {
   const current = location.hash.slice(1) || 'home';
   $('#lesson-nav').innerHTML = lessons.map((lesson) => `<a href="${lessonHref(lesson)}" class="nav-link ${current === lesson.id ? 'active' : ''}" ${current === lesson.id ? 'aria-current="page"' : ''}><span class="nav-number">${lesson.number}</span><span class="nav-title">${lesson.title}</span><span class="nav-complete">${state.completed.includes(lesson.id) ? '✓' : ''}</span></a>`).join('') + `<a href="#vm" class="nav-link vm-nav-link ${current === 'vm' ? 'active' : ''}" ${current === 'vm' ? 'aria-current="page"' : ''}><span class="nav-number">⌘</span><span class="nav-title">VM Lab</span><span class="nav-complete">↗</span></a>`;
+  $('#lesson-nav').insertAdjacentHTML('beforeend', `<a href="#project" class="nav-link ${current === 'project' ? 'active' : ''}" ${current === 'project' ? 'aria-current="page"' : ''}><span class="nav-number">↗</span><span class="nav-title">เส้นทางโปรเจกต์</span></a><a href="#troubleshooting" class="nav-link ${current === 'troubleshooting' ? 'active' : ''}" ${current === 'troubleshooting' ? 'aria-current="page"' : ''}><span class="nav-number">?</span><span class="nav-title">ฝึกแก้ปัญหา</span></a>`);
   $('#progress-count').textContent = `${state.completed.length} / ${lessons.length}`;
   $('#progress-fill').style.width = `${(state.completed.length / lessons.length) * 100}%`;
   $('.progress-track').setAttribute('aria-valuenow', String(state.completed.length));
@@ -129,7 +131,7 @@ function renderHome() {
         <div class="hero-visual" aria-label="ภาพอธิบาย Dockerfile สร้าง image และเริ่ม container"><div class="visual-top"><span class="visual-signal"></span> HOW DOCKER WORKS <span>● ● ●</span></div><div class="visual-flow"><div class="flow-node file-node"><span class="node-icon">{ }</span><small>01 / RECIPE</small><strong>Dockerfile</strong><span>FROM nginx:alpine</span></div><div class="flow-arrow">→</div><div class="flow-node image-node"><span class="node-icon">▤</span><small>02 / PACKAGE</small><strong>Image</strong><span>immutable layers</span></div><div class="flow-arrow">→</div><div class="flow-node container-node"><span class="node-icon">▣</span><small>03 / PROCESS</small><strong>Container</strong><span><i class="live-dot"></i> running</span></div></div><div class="visual-console"><span>$ docker run -d nginx:alpine</span><span class="console-result">✓ Container is running</span></div></div>
       </section>
       <section class="roadmap" id="roadmap"><div class="section-heading"><div><span class="section-kicker">THE LEARNING PATH</span><h2>จากภาพใหญ่ <em>ไปถึงใช้งานจริง</em></h2></div><p>เริ่มที่พื้นฐาน แล้วค่อยต่อเป็น workflow ที่ใช้ในโปรเจกต์จริง แต่ละบทมีคำถามตรวจความเข้าใจ</p></div><div class="roadmap-grid">${lessons.map((lesson) => `<a class="roadmap-item" href="${lessonHref(lesson)}"><div class="roadmap-item-top"><span>${lesson.number} <span class="roadmap-icon">${lesson.icon}</span></span><span class="roadmap-status">${state.completed.includes(lesson.id) ? 'เรียนแล้ว ✓' : lesson.time}</span></div><h3>${lesson.title}</h3><p>${lesson.subtitle}</p><span class="roadmap-arrow">↗</span></a>`).join('')}</div></section>
-      <section class="bottom-banner"><div><span>READY TO BUILD?</span><h2>ลองฝึกใน VM Lab</h2><p>แก้ไฟล์ สร้าง image เริ่ม container และทดสอบเว็บในเครื่องจำลองที่จำสถานะไว้</p></div><a class="primary-button light" href="#vm">เปิด VM Lab ↗</a></section>
+      <div class="curriculum-links curriculum-home-links"><a href="#project">เรียนผ่านโปรเจกต์เดียว ตั้งแต่ Nginx ถึง Compose →</a><a href="#troubleshooting">ฝึกแก้ปัญหา 4 สถานการณ์ →</a></div><section class="bottom-banner"><div><span>READY TO BUILD?</span><h2>ลองฝึกใน VM Lab</h2><p>แก้ไฟล์ สร้าง image เริ่ม container และทดสอบเว็บในเครื่องจำลองที่จำสถานะไว้</p></div><a class="primary-button light" href="#vm">เปิด VM Lab ↗</a></section>
     </div>`;
 }
 
@@ -141,7 +143,7 @@ function renderQuiz(lesson) {
 function renderLesson(lesson) {
   const index = lessons.findIndex((item) => item.id === lesson.id);
   const next = lessons[index + 1];
-  $('#main').innerHTML = `<div class="lesson-page"><div class="lesson-breadcrumb"><a href="#home">หน้าแรก</a><span>/</span><span>บทที่ ${lesson.number}</span></div><section class="lesson-header"><div class="lesson-number">${lesson.number}</div><div><div class="lesson-meta"><span>${lesson.level}</span><span>●</span><span>${lesson.time}</span></div><h1>${lesson.title}</h1><p>${lesson.lead}</p></div></section><div class="lesson-layout"><article class="lesson-article">${lesson.body}<div class="lesson-source">อ่านเพิ่มเติม: <a href="${lesson.source}" target="_blank" rel="noopener noreferrer">Docker Docs ↗</a></div></article><aside class="lab-column" aria-label="พื้นที่ทดลอง"><div class="lab-card"><div class="lab-heading"><div><span class="lab-spark">✳</span><span>INTERACTIVE LAB</span></div><span>ลองกดได้</span></div>${renderLab(lesson.lab)}</div></aside></div>${renderQuiz(lesson)}<div class="lesson-end"><a href="#home">← กลับหน้าหลัก</a>${next ? `<a href="${lessonHref(next)}">บทถัดไป: ${next.title} →</a>` : '<a href="#sources">ดูแหล่งอ้างอิงทั้งหมด →</a>'}</div></div>`;
+  $('#main').innerHTML = `<div class="lesson-page"><div class="lesson-breadcrumb"><a href="#home">หน้าแรก</a><span>/</span><span>บทที่ ${lesson.number}</span></div><section class="lesson-header"><div class="lesson-number">${lesson.number}</div><div><div class="lesson-meta"><span>${lesson.level}</span><span>●</span><span>${lesson.time}</span></div><h1>${lesson.title}</h1><p>${lesson.lead}</p></div></section><div class="lesson-layout"><article class="lesson-article">${lesson.body}${lessonProjectLink(lesson.id)}<div class="lesson-source">อ่านเพิ่มเติม: <a href="${lesson.source}" target="_blank" rel="noopener noreferrer">Docker Docs ↗</a></div></article><aside class="lab-column" aria-label="พื้นที่ทดลอง"><div class="lab-card"><div class="lab-heading"><div><span class="lab-spark">✳</span><span>INTERACTIVE LAB</span></div><span>ลองกดได้</span></div>${renderLab(lesson.lab)}${renderLessonHints(lesson.id)}</div></aside></div>${renderQuiz(lesson)}<div class="lesson-end"><button type="button" id="reset-lesson">เริ่มบทนี้ใหม่ ↻</button><a href="#home">← กลับหน้าหลัก</a>${next ? `<a href="${lessonHref(next)}">บทถัดไป: ${next.title} →</a>` : '<a href="#sources">ดูแหล่งอ้างอิงทั้งหมด →</a>'}</div></div>`;
 }
 
 function renderLab(kind) {
@@ -227,6 +229,8 @@ function render() {
   renderNav();
   if (lesson) { renderLesson(lesson); updateLab(lesson.lab); }
   else if (route === 'vm') renderVMLab($('#main'));
+  else if (route === 'project') renderProject($('#main'));
+  else if (route === 'troubleshooting') renderTroubleshooting($('#main'));
   else if (route === 'sources') renderSources();
   else renderHome();
   window.scrollTo({ top: 0, behavior: 'instant' });
@@ -241,6 +245,16 @@ document.addEventListener('click', (event) => {
   const lesson = lessons.find((item) => item.id === location.hash.slice(1));
   if (target.id === 'menu-button') { const open = !document.body.classList.contains('menu-open'); document.body.classList.toggle('menu-open', open); target.setAttribute('aria-expanded', String(open)); $('#sidebar-scrim').hidden = !open; return; }
   if (!lesson) return;
+  if (target.id === 'reset-lesson') {
+    if (!confirm('เริ่มบทนี้ใหม่? คำตอบและเครื่องหมายผ่านของบทนี้จะถูกล้าง งานใน VM ยังอยู่')) return;
+    delete state.answers[lesson.id]; state.completed = state.completed.filter(id => id !== lesson.id);
+    safeSet('docker-lab-answers-v1', state.answers); safeSet('docker-lab-progress-v1', state.completed);
+    if (lesson.lab === 'terminal') state.terminal = { running:false, exists:false, history:[] };
+    if (lesson.lab === 'volume') state.storage = { layer:'hello', volume:'hello', useVolume:false, recreated:false };
+    if (lesson.lab === 'checklist') state.checks = new Set();
+    state.model = 'dockerfile'; state.cache = 'source'; state.network = null; state.workflow = 'multi';
+    renderNav(); renderLesson(lesson); updateLab(lesson.lab); return;
+  }
   if (target.dataset.answer !== undefined) {
     state.answers[lesson.id] = Number(target.dataset.answer); safeSet('docker-lab-answers-v1', state.answers);
     if (state.answers[lesson.id] === lesson.quiz.answer && !state.completed.includes(lesson.id)) { state.completed.push(lesson.id); safeSet('docker-lab-progress-v1', state.completed); }

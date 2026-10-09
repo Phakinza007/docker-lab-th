@@ -20,7 +20,7 @@ VM Lab เปิดที่ [หน้า VM Lab](https://phakinza007.github.io
 
 รัน local static server เช่น `python3 -m http.server 8000` แล้วเปิด `http://localhost:8000`
 
-ตรวจตรรกะ VM Lab ด้วย `node --test tests/vm-engine.test.mjs`
+ตรวจตรรกะ VM Lab ด้วย `node --test tests/*.test.mjs`
 
 ## Deploy
 
@@ -33,3 +33,21 @@ Repository นี้ใช้ GitHub Actions ใน `.github/workflows/deploy.ym
 ## พื้นที่ฝึกรวม
 
 บทเรียนและ VM Lab อยู่ใน [Knowledge Web](https://knowledge-web-one.vercel.app/practice#int134) แล้ว เว็บเดิมยังใช้งานได้ กด **ส่งออกงาน** แล้วนำไฟล์ JSON ไปนำเข้าในหน้าพื้นที่ฝึกของเว็บรวมเพื่อทำงานต่อ
+
+## อัปเดต 9 ตุลาคม 2026
+
+- ธีมสว่าง/มืดและสัดส่วนพื้นที่ฝึกบันทึกในเบราว์เซอร์ ลากเส้นแบ่งหรือใช้ปุ่มลูกศรได้
+- ขยาย Terminal/ตัวแก้ไข/ภารกิจ/พื้นที่ทดลองประจำบท และกด Escape เพื่อคืนหน้าเดิม
+- VM บันทึกไฟล์อัตโนมัติ ขึ้น/ลงเรียกคำสั่งเก่า มีคำใบ้ทีละระดับและตรวจงานจากสถานะปัจจุบัน
+- Diagram แสดง Image → Container, published port, service ภายใน network และ volume ที่ mount
+- `#project` เส้นทางสร้างเว็บ 6 ขั้น และ `#troubleshooting` โจทย์แก้ชื่อซ้ำ, port ชน, host ผิด, ข้อมูลหาย
+- ส่งออก/นำเข้า JSON รวมไฟล์ ประวัติคำสั่ง VM บทเรียน คำตอบ และโจทย์ที่ผ่าน รองรับไฟล์ส่งออกรุ่นก่อน
+- รีเซ็ตเฉพาะ VM หรือบทเรียนได้ มีการยืนยันก่อนแทนข้อมูล
+
+### ขอบเขตตัวจำลองที่เพิ่ม
+
+Named volume รองรับ `-v NAME:/data`, `echo "text" > /data/note.txt`, `cat` และ `volume create/ls/inspect/rm` เพื่อเปรียบเทียบกับ writable layer
+
+Compose รองรับ subset ที่ระบุใน VM: web build จาก `.` และ publish `HOST:80`; optional db `postgres:16-alpine` และ named volume ที่ `/var/lib/postgresql/data` รวม `depends_on: [db]` การสั่ง `up -d --build` สร้าง image/containers ใหม่ตามไฟล์และ port จริงใน config ส่วน `down` เก็บ volume และ `down -v` ลบ volume ที่เลิกใช้ รองรับ `getent hosts db` และ `nc -z db 5432` ภายใน network จำลอง ฐานข้อมูลเป็นเพียงโมเดล TCP/DNS ไม่รัน SQL, authentication หรือ Docker จริง และคำสั่ง/config นอก subset จะแจ้งข้อจำกัด
+
+ข้อมูลอยู่ใน localStorage ของ origin นี้ ไม่ซิงก์ระหว่าง GitHub Pages กับ localhost หรืออุปกรณ์อื่น ให้ส่งออก/นำเข้าไฟล์เมื่อต้องย้ายงาน
