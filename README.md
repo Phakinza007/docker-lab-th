@@ -29,3 +29,7 @@ Repository นี้ใช้ GitHub Actions ใน `.github/workflows/deploy.ym
 ## แหล่งอ้างอิง
 
 อ้างอิงจาก [Docker Docs](https://docs.docker.com/) และ [GitHub Pages Docs](https://docs.github.com/en/pages) ลิงก์รายหัวข้ออยู่ในเว็บ
+
+## พื้นที่ฝึกรวม
+
+บทเรียนและ VM Lab อยู่ใน [Knowledge Web](https://knowledge-web-one.vercel.app/practice#int134) แล้ว เว็บเดิมยังใช้งานได้ กด **ส่งออกงาน** แล้วนำไฟล์ JSON ไปนำเข้าในหน้าพื้นที่ฝึกของเว็บรวมเพื่อทำงานต่อ
