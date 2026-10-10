@@ -1,3 +1,5 @@
+import { initialPlayground, playDiagram, renderPlayground } from './diagram-playground.mjs?v=20261010-play';
+const playgrounds = new Map();
 const box = (title, detail, tone = '') => `<div class="ld-node ${tone}"><strong>${title}</strong><span>${detail}</span></div>`;
 const arrow = (label = '') => `<div class="ld-arrow"><small>${label}</small><span aria-hidden="true">→</span></div>`;
 const row = (...items) => `<div class="ld-row">${items.join('')}</div>`;
@@ -68,16 +70,28 @@ Object.assign(lessonDiagrams, {
 });
 export function renderLessonDiagram(id, expanded = false) {
   const diagram = lessonDiagrams[id]; if (!diagram) return '';
-  return `<figure class="lesson-diagram"><div class="ld-heading"><h2>${diagram.title}</h2>${expanded ? '' : `<button type="button" data-expand-diagram="${id}" aria-label="ขยาย Diagram: ${diagram.title}">ขยายภาพ ↗</button>`}</div><div class="ld-canvas" role="group" aria-label="${diagram.title}">${diagram.content}</div><figcaption>${diagram.caption}</figcaption></figure>`;
+  if (!playgrounds.has(id)) playgrounds.set(id, initialPlayground(id));
+  const play = renderPlayground(playgrounds.get(id));
+  return `<figure class="lesson-diagram" data-diagram-id="${id}" data-diagram-expanded="${expanded}"><div class="ld-heading"><h2>${diagram.title}</h2>${expanded ? '' : `<button type="button" data-expand-diagram="${id}" aria-label="ขยาย Diagram: ${diagram.title}">ขยายภาพ ↗</button>`}</div><div class="ld-canvas" role="group" aria-label="${diagram.title}">${play?.content || diagram.content}</div>${play ? `<div class="ld-playground">${play.controls}</div>` : ''}<figcaption>${diagram.caption}</figcaption></figure>`;
 }
 if (typeof document !== 'undefined') {
   document.addEventListener('click', event => {
+    const action = event.target.closest('[data-diagram-action]');
+    if (action) {
+      const figure = action.closest('[data-diagram-id]'); const id = figure.dataset.diagramId;
+      const next = playDiagram(playgrounds.get(id), action.dataset.diagramAction, figure.querySelector('[data-diagram-value]')?.value || '');
+      playgrounds.set(id, next);
+      const expanded = figure.dataset.diagramExpanded;
+      document.querySelectorAll(`[data-diagram-id="${id}"]`).forEach(item => { item.outerHTML = renderLessonDiagram(id, item.dataset.diagramExpanded === 'true'); });
+      document.querySelector(`[data-diagram-id="${id}"][data-diagram-expanded="${expanded}"] [data-diagram-action="${action.dataset.diagramAction}"]`)?.focus();
+      return;
+    }
     const trigger = event.target.closest('[data-expand-diagram]');
     if (!trigger) return;
     const dialog = document.createElement('dialog'); dialog.className = 'ld-dialog'; dialog.setAttribute('aria-label','Diagram แบบขยาย');
     dialog.innerHTML = `<form method="dialog"><button autofocus aria-label="ปิด Diagram">ปิด · Esc</button></form>${renderLessonDiagram(trigger.dataset.expandDiagram, true)}`;
     document.body.append(dialog);
-    dialog.addEventListener('close', () => { dialog.remove(); if (trigger.isConnected) trigger.focus(); }, {once:true});
+    dialog.addEventListener('close', () => { dialog.remove(); document.querySelector(`[data-expand-diagram="${trigger.dataset.expandDiagram}"]`)?.focus(); }, {once:true});
     dialog.showModal();
   });
 }

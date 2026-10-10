@@ -1,4 +1,4 @@
-import { renderLessonDiagram } from './lesson-diagrams.mjs?v=20261010-inline';
+import { renderLessonDiagram } from './lesson-diagrams.mjs?v=20261010-play';
 import { renderVMLab } from './vm-lab.mjs?v=20261009-lab';
 import { renderProject, renderTroubleshooting, lessonProjectLink, renderLessonHints } from './curriculum.mjs';
 
