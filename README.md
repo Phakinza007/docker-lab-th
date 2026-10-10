@@ -51,3 +51,12 @@ Named volume รองรับ `-v NAME:/data`, `echo "text" > /data/note.txt`,
 Compose รองรับ subset ที่ระบุใน VM: web build จาก `.` และ publish `HOST:80`; optional db `postgres:16-alpine` และ named volume ที่ `/var/lib/postgresql/data` รวม `depends_on: [db]` การสั่ง `up -d --build` สร้าง image/containers ใหม่ตามไฟล์และ port จริงใน config ส่วน `down` เก็บ volume และ `down -v` ลบ volume ที่เลิกใช้ รองรับ `getent hosts db` และ `nc -z db 5432` ภายใน network จำลอง ฐานข้อมูลเป็นเพียงโมเดล TCP/DNS ไม่รัน SQL, authentication หรือ Docker จริง และคำสั่ง/config นอก subset จะแจ้งข้อจำกัด
 
 ข้อมูลอยู่ใน localStorage ของ origin นี้ ไม่ซิงก์ระหว่าง GitHub Pages กับ localhost หรืออุปกรณ์อื่น ให้ส่งออก/นำเข้าไฟล์เมื่อต้องย้ายงาน
+
+
+## Learning flow (10 Oct 2026)
+
+- Lesson diagrams are the only concept playground inside each lesson; the right pane now holds the task and reflection guide. VM Lab is the separate command practice workspace, with a return link that persists across commands and file edits.
+- Each lesson asks for a prediction, diagram exploration, a task check, a written explanation with a clearly labeled self assessment, and the existing quiz. Progress distinguishes read, explored, and task passed; it does not certify mastery.
+- Lessons 1–5 use VM state and recent command evidence. Lessons 6–7 explicitly check conceptual simulations and transfer questions, and recommend finishing the foundation first. Real Docker practice is linked separately.
+- Dockerfile, named volume and Compose snippets match the simulator. PostgreSQL 16 is used in the teaching Compose sample; the simulated DB supports DNS/TCP only.
+- Learning records and reflections are included in JSON export/import. Older exports still load; previous quiz answers are retained, while task completion follows the new criteria.

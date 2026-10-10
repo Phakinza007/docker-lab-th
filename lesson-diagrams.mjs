@@ -45,7 +45,7 @@ Object.assign(lessonDiagrams, {
   'cli-port': {
     title: 'อ่าน -p 8080:80 จากซ้ายไปขวา',
     content: row(box('Browser / curl','localhost:8080'),arrow('Host port 8080'),box('Container: web','Nginx ฟัง port 80','ld-accent')),
-    caption: 'เริ่มอ่านจากเครื่องที่เปิด Browser: ไปที่ host port 8080 แล้ว Docker ส่งต่อเข้า container port 80 ลองรันคำสั่งด้านบนใน Terminal ข้าง ๆ',
+    caption: 'เริ่มอ่านจากเครื่องที่เปิด Browser: ไปที่ host port 8080 แล้ว Docker ส่งต่อเข้า container port 80 ลองรันคำสั่งด้านบนใน VM Lab',
   },
   'cli-lifecycle': {
     title: 'หยุดตัวเดิม หรือสร้างตัวใหม่?',
@@ -60,7 +60,7 @@ Object.assign(lessonDiagrams, {
   'workflow-watch': {
     title: 'เมื่อแก้ไฟล์ระหว่างพัฒนา',
     content: row(box('แก้ไฟล์ในเครื่อง','ตรวจการเปลี่ยนแปลง'),arrow('develop.watch'),box('sync หรือ rebuild','ขึ้นกับ action ที่ตั้งค่า'),arrow(),box('Service อัปเดต','ใช้ compose up --watch')),
-    caption: 'การแก้ไฟล์ไม่ทำให้ทุก service อัปเดตเอง ต้องกำหนด watch rule และ action ก่อน ลองเทียบกับ Multi-stage ในพื้นที่ทดลองข้าง ๆ',
+    caption: 'การแก้ไฟล์ไม่ทำให้ทุก service อัปเดตเอง ต้องกำหนด watch rule และ action ก่อน ลองเทียบกับ Multi-stage ใน Diagram',
   },
   'ship-secret': {
     title: 'Secret ใช้ระหว่าง Build แต่ไม่ควรติดไปกับ Image',
@@ -68,6 +68,7 @@ Object.assign(lessonDiagrams, {
     caption: 'อ่านเส้นทางข้อมูลลับนี้ควบคู่กับข้อ 2: Secret mount ทำให้ใช้ secret ชั่วคราว แต่คำสั่ง Build ยังต้องไม่เขียน secret ลง artifact เอง',
   },
 });
+export function resetLessonDiagram(id) { if(lessonDiagrams[id]) playgrounds.set(id,initialPlayground(id)); }
 export function renderLessonDiagram(id, expanded = false) {
   const diagram = lessonDiagrams[id]; if (!diagram) return '';
   if (!playgrounds.has(id)) playgrounds.set(id, initialPlayground(id));
@@ -81,6 +82,7 @@ if (typeof document !== 'undefined') {
       const figure = action.closest('[data-diagram-id]'); const id = figure.dataset.diagramId;
       const next = playDiagram(playgrounds.get(id), action.dataset.diagramAction, figure.querySelector('[data-diagram-value]')?.value || '');
       playgrounds.set(id, next);
+      if(action.dataset.diagramAction!=='reset') document.dispatchEvent(new CustomEvent('diagram-practiced', {detail:{id,state:next,action:action.dataset.diagramAction}}));
       const expanded = figure.dataset.diagramExpanded;
       document.querySelectorAll(`[data-diagram-id="${id}"]`).forEach(item => { item.outerHTML = renderLessonDiagram(id, item.dataset.diagramExpanded === 'true'); });
       document.querySelector(`[data-diagram-id="${id}"][data-diagram-expanded="${expanded}"] [data-diagram-action="${action.dataset.diagramAction}"]`)?.focus();

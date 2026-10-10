@@ -1,8 +1,10 @@
+import { tasks } from './learning-flow.mjs';
 import { VM_STORAGE_KEY, PROJECT, MISSIONS, createVM, validVM, prompt, listFiles, validateDockerfile, saveFile, runVMCommand } from './vm-engine.mjs?v=20261009-complete';
 
 const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
 const safeStore = () => { try { const stored = JSON.parse(localStorage.getItem(VM_STORAGE_KEY)); return validVM(stored) ? stored : createVM(); } catch { return createVM(); } };
 let vm = safeStore();
+export function getVMState() { return vm; }
 let selectedFile = `${PROJECT}/Dockerfile`;
 let activeTab = 'files';
 let previewPort = 8080;
@@ -97,6 +99,8 @@ function template() {
 
 export function renderVMLab(main) {
   main.innerHTML = template();
+  const from = new URLSearchParams(location.hash.split('?')[1] || '').get('lesson');
+  if(Object.hasOwn(tasks,from)) main.insertAdjacentHTML('afterbegin', `<section class="learning-bridge"><a href="#${from}">← กลับไปตรวจโจทย์บทนี้</a><p>${tasks[from].goal}</p></section>`);
   const root = main.querySelector('.vm-page');
   const preview = root.querySelector('#vm-preview-frame');
   if (preview) {

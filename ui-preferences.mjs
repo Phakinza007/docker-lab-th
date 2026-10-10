@@ -127,7 +127,7 @@ function enhance() {
     const lab = lesson.querySelector('.lab-column');
     if (lab) {
       lesson.insertBefore(splitter(lesson, 'lessonSplit', 'column', 55, 35, 65, n => lesson.style.setProperty('--lesson-width', `${n}%`)), lab);
-      addFocus(lab.querySelector('.lab-card'), 'ทดลองประจำบท', 'lesson-lab');
+      addFocus(lab.querySelector('.lab-card'), lab.querySelector('.learning-guide') ? 'โจทย์ประจำบท' : 'ทดลองประจำบท', 'lesson-lab');
     }
   }
   if (focusedKey && !focusedPane) {

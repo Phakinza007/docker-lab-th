@@ -1,4 +1,4 @@
-import { readSession, parseSession } from './vm-session.mjs';
+import { readSession, parseSession } from './vm-session.mjs?v=20261010-learning';
 const exportButton = document.querySelector('#export-progress');
 const importButton = document.createElement('button');
 importButton.type = 'button'; importButton.textContent = 'นำเข้างาน'; importButton.id = 'import-progress';
@@ -17,7 +17,7 @@ picker.addEventListener('change', async () => {
     if (file.size > 2_000_000) throw new Error('ไฟล์ต้องมีขนาดไม่เกิน 2 MB');
     const data = parseSession(await file.text());
     if (!confirm('นำเข้างานนี้แทนไฟล์และความคืบหน้าปัจจุบัน? ส่งออกงานเดิมเก็บไว้ก่อนได้')) return;
-    const entries = [['docker-lab-vm-v1', data.vm], ['docker-lab-progress-v1', data.completed], ['docker-lab-answers-v1', data.answers], ['docker-lab-troubleshooting-v1', data.troubleshooting]];
+    const entries = [['docker-lab-vm-v1', data.vm], ['docker-lab-progress-v1', data.completed], ['docker-lab-answers-v1', data.answers], ['docker-lab-troubleshooting-v1', data.troubleshooting], ['docker-lab-learning-v1', data.learning]];
     const previous = entries.map(([key]) => [key, localStorage.getItem(key)]);
     try { for (const [key, value] of entries) localStorage.setItem(key, JSON.stringify(value)); }
     catch (error) { for (const [key, value] of previous) { try { value === null ? localStorage.removeItem(key) : localStorage.setItem(key, value); } catch {} } throw error; }
