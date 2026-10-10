@@ -39,6 +39,33 @@ export const lessonDiagrams = {
     caption: 'Secret mount ไม่ได้ป้องกันคำสั่ง Build จากการคัดลอก secret ไปใส่ output เอง ต้องตรวจ Dockerfile และ artifact ด้วย Healthcheck ช่วยสังเกตอาการ แต่ไม่แทนการทดสอบแอป',
   },
 };
+Object.assign(lessonDiagrams, {
+  'cli-port': {
+    title: 'อ่าน -p 8080:80 จากซ้ายไปขวา',
+    content: row(box('Browser / curl','localhost:8080'),arrow('Host port 8080'),box('Container: web','Nginx ฟัง port 80','ld-accent')),
+    caption: 'เริ่มอ่านจากเครื่องที่เปิด Browser: ไปที่ host port 8080 แล้ว Docker ส่งต่อเข้า container port 80 ลองรันคำสั่งด้านบนใน Terminal ข้าง ๆ',
+  },
+  'cli-lifecycle': {
+    title: 'หยุดตัวเดิม หรือสร้างตัวใหม่?',
+    content: row(box('ยังไม่มี Container','docker run สร้างตัวใหม่'),arrow('run'),box('Running','logs / exec ใช้ดูภายใน'),arrow('stop'),box('Exited','start กลับไป Running ได้'),arrow('rm'),box('ลบแล้ว','ชื่อถูกคืน · writable layer หาย')),
+    caption: 'ติดตามชื่อ web ตามลูกศร: stop ยังเก็บตัวเดิมไว้ จึง start ได้ ส่วน rm ลบตัวเดิม หลังจากนั้นต้อง run เพื่อสร้างใหม่',
+  },
+  'workflow-build': {
+    title: 'ตามไฟล์ dist/ ข้าม Stage',
+    content: row(group('Stage 1 · build',box('Node + dependencies + source','npm ci → npm run build')),arrow('COPY --from=build'),group('Stage 2 · runtime',box('Nginx + dist/','คัดลอกเฉพาะไฟล์ผลลัพธ์','ld-accent'))),
+    caption: 'เทียบกับ Dockerfile ด้านบน: FROM ที่สองเริ่ม stage ใหม่ ส่วน COPY --from=build นำ /app/dist/ จาก stage แรกมาใส่ image สุดท้าย',
+  },
+  'workflow-watch': {
+    title: 'เมื่อแก้ไฟล์ระหว่างพัฒนา',
+    content: row(box('แก้ไฟล์ในเครื่อง','ตรวจการเปลี่ยนแปลง'),arrow('develop.watch'),box('sync หรือ rebuild','ขึ้นกับ action ที่ตั้งค่า'),arrow(),box('Service อัปเดต','ใช้ compose up --watch')),
+    caption: 'การแก้ไฟล์ไม่ทำให้ทุก service อัปเดตเอง ต้องกำหนด watch rule และ action ก่อน ลองเทียบกับ Multi-stage ในพื้นที่ทดลองข้าง ๆ',
+  },
+  'ship-secret': {
+    title: 'Secret ใช้ระหว่าง Build แต่ไม่ควรติดไปกับ Image',
+    content: row(box('Secret จากผู้ Build','ส่งด้วย --secret'),arrow('mount ชั่วคราว'),box('RUN ที่ต้องใช้ Secret','ใช้เข้าถึง dependency ส่วนตัว'),arrow('ผลลัพธ์'),box('Artifact / Image','ตรวจว่าไม่มี Secret ถูกคัดลอกออกมา','ld-accent')),
+    caption: 'อ่านเส้นทางข้อมูลลับนี้ควบคู่กับข้อ 2: Secret mount ทำให้ใช้ secret ชั่วคราว แต่คำสั่ง Build ยังต้องไม่เขียน secret ลง artifact เอง',
+  },
+});
 export function renderLessonDiagram(id, expanded = false) {
   const diagram = lessonDiagrams[id]; if (!diagram) return '';
   return `<figure class="lesson-diagram"><div class="ld-heading"><h2>${diagram.title}</h2>${expanded ? '' : `<button type="button" data-expand-diagram="${id}" aria-label="ขยาย Diagram: ${diagram.title}">ขยายภาพ ↗</button>`}</div><div class="ld-canvas" role="group" aria-label="${diagram.title}">${diagram.content}</div><figcaption>${diagram.caption}</figcaption></figure>`;
