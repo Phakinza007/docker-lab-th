@@ -57,6 +57,6 @@ Compose รองรับ subset ที่ระบุใน VM: web build จ�
 
 - Lesson diagrams are the only concept playground inside each lesson; the right pane now holds the task and reflection guide. VM Lab is the separate command practice workspace, with a return link that persists across commands and file edits.
 - Each lesson asks for a prediction, diagram exploration, a task check, a written explanation with a clearly labeled self assessment, and the existing quiz. Progress distinguishes read, explored, and task passed; it does not certify mastery.
-- Lessons 1–5 use VM state and recent command evidence. Lessons 6–7 explicitly check conceptual simulations and transfer questions, and recommend finishing the foundation first. Real Docker practice is linked separately.
+- Lesson 1 checks a diagram snapshot exercise before command syntax is introduced. Lessons 2–5 use VM state and recent command evidence. Lessons 6–7 explicitly check conceptual simulations and transfer questions, and recommend finishing the foundation first. Real Docker practice is linked separately.
 - Dockerfile, named volume and Compose snippets match the simulator. PostgreSQL 16 is used in the teaching Compose sample; the simulated DB supports DNS/TCP only.
 - Learning records and reflections are included in JSON export/import. Older exports still load; previous quiz answers are retained, while task completion follows the new criteria.

@@ -22,7 +22,7 @@ test('image, Dockerfile and lifecycle tasks require observable VM results',()=>{
  assert.equal(checkTask('dockerfile',vm),false);
  run(vm,'curl localhost:8080');assert.equal(checkTask('dockerfile',vm),true);
  assert.equal(checkTask('mental-model',vm),false);
- saveFile(vm,'index.html','<h1>Changed</h1>');assert.equal(checkTask('mental-model',vm),true);
+ saveFile(vm,'index.html','<h1>Changed</h1>');assert.equal(checkTask('mental-model',vm),false);
  assert.equal(checkTask('dockerfile',vm),false);
  run(vm,'docker logs web');assert.equal(checkTask('cli',vm),false);
  run(vm,'docker stop web');assert.equal(checkTask('cli',vm),true);
@@ -44,6 +44,8 @@ test('a quiz or a click alone cannot complete a lesson or advanced task',()=>{
  assert.equal(lessonPassed(p,true),true);
  for(const field of ['read','practiced','task','reflected','reflection','prediction']) {const partial={...p};delete partial[field];assert.equal(lessonPassed(partial,true),false,field);}
  assert.equal(lessonPassed(p,false),false);
+ assert.equal(checkTask('mental-model',null,{practiced:true,transfer:0}),false);
+ assert.equal(checkTask('mental-model',null,{practiced:true,transfer:0,explored:['snapshot']}),true);
  assert.equal(checkTask('workflow',null,{practiced:true,transfer:1}),false);
  assert.equal(checkTask('workflow',null,{practiced:true,transfer:1,explored:['dist','watch-sync','watch-rebuild']}),true);
  assert.equal(checkTask('ship',null,{practiced:true,transfer:1,explored:['mounted']}),false);

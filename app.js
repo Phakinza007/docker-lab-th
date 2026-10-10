@@ -231,6 +231,7 @@ document.addEventListener('diagram-practiced', (event) => {
   const p=learning[id] ||= {}; p.practiced=true;
   const {id:diagram,state:played}=event.detail;
   const evidence=new Set(p.explored || []);
+  if(diagram==='mental-model' && played.source>played.image && played.image>0 && played.container===played.image && played.status==='running')evidence.add('snapshot');
   if(diagram==='workflow-build' && played.copied)evidence.add('dist');
   if(diagram==='workflow-watch' && event.detail.action==='edit')evidence.add(`watch-${played.watch}`);
   if(diagram==='ship-secret' && played.leaked)evidence.add('leaked');
