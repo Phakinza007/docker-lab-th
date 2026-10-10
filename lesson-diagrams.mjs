@@ -42,6 +42,28 @@ export const lessonDiagrams = {
   },
 };
 Object.assign(lessonDiagrams, {
+ 'week7-mount': {
+  title:'คนละทางเลือกของที่เก็บข้อมูล',
+  content: group('Bind mount',row(box('Host path','/srv/class/mysql'),arrow('ผูก directory'),box('MySQL container','/var/lib/mysql')))+group('Named volume',row(box('Docker volume','class-db-data'),arrow('mount'),box('MySQL container','/var/lib/mysql','ld-accent'))),
+  caption:'ภาพอธิบาย MySQL ใน Week 7: data directory อยู่ที่ /var/lib/mysql ทั้งสองทางเลือก ต่างกันที่ใครจัดการที่เก็บด้านนอก ไม่ใช่แบบจำลองฐานข้อมูลจริง',
+ },
+ 'week8-listen': {
+  title:'มี Port แล้ว ต้องดูว่าแอปฟังตรงไหนด้วย',
+  content: row(box('Browser','Host :8080'),arrow('publish 8080:3000'),group('API container',row(box('Network interface','รับ request จากภายนอก'),arrow('แอปต้องรับได้'),box('Node :3000','bind 0.0.0.0 เมื่อแอปรองรับ','ld-accent')))),
+  caption:'127.0.0.1 ใน container เป็น loopback ของตัวเอง การ publish port ไม่เปลี่ยน bind address ของแอป ต้องตรวจโค้ดและ runtime config แยกกัน',
+ },
+ 'week8-network': {
+  title:'จาก API ไป MySQL ใน User-defined network',
+  content: group('class-net · user-defined bridge',row(box('class-api','DB_HOST=class-db'),arrow('class-db:3306'),box('class-db','MySQL · ไม่ใช่ localhost ของ API','ld-accent'))),
+  caption:'เรียกกันด้วยชื่อ container ภายใน user-defined bridge เดียวกัน การหา host เจอไม่ได้ยืนยันรหัสผ่าน สิทธิ์ user หรือความพร้อมของ MySQL',
+ },
+ 'week8-process': {
+  title:'ให้แอปรับสัญญาณหยุดโดยตรง',
+  content: row(box('ENTRYPOINT script','ตรวจ config ก่อนเริ่ม'),arrow('exec "$@"'),box('Node process','มาแทน shell · รับ signal โดยตรง','ld-accent'),arrow('SIGTERM'),box('Shutdown ของแอป','ต้องจัดการให้เหมาะสมเอง')),
+  caption:'ภาพอธิบาย exec ใน startup script ไม่ได้รัน process จริง และไม่รับประกันเวลา shutdown; ต้องตรวจพฤติกรรมแอปประกอบ',
+ },
+});
+Object.assign(lessonDiagrams, {
   'cli-port': {
     title: 'อ่าน -p 8080:80 จากซ้ายไปขวา',
     content: row(box('Browser / curl','localhost:8080'),arrow('Host port 8080'),box('Container: web','Nginx ฟัง port 80','ld-accent')),

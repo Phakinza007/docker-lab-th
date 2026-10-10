@@ -1,4 +1,5 @@
-import { renderLessonDiagram, resetLessonDiagram } from './lesson-diagrams.mjs?v=20261010-learning2';
+import { weeks, weekNav, renderWeeksHome, renderWeek } from './weekly-course.mjs?v=20261010-weeks1';
+import { renderLessonDiagram, resetLessonDiagram } from './lesson-diagrams.mjs?v=20261010-weeks1';
 import { LEARNING_KEY, tasks, validLearning, lessonPassed, checkTask, renderPrediction, renderLearningTask } from './learning-flow.mjs?v=20261010-learning2';
 import { renderVMLab, getVMState } from './vm-lab.mjs?v=20261010-learning2';
 import { renderProject, renderTroubleshooting, lessonProjectLink } from './curriculum.mjs';
@@ -124,14 +125,14 @@ syncProgress();
 
 function renderNav() {
   const current = location.hash.slice(1).split('?')[0] || 'home';
-  $('#lesson-nav').innerHTML = lessons.map((lesson) => `<a href="${lessonHref(lesson)}" class="nav-link ${current === lesson.id ? 'active' : ''}" ${current === lesson.id ? 'aria-current="page"' : ''}><span class="nav-number">${lesson.number}</span><span class="nav-title">${lesson.title}</span><span class="nav-complete">${state.completed.includes(lesson.id) ? '✓' : learning[lesson.id]?.practiced ? '◐' : learning[lesson.id]?.read ? '·' : ''}</span></a>`).join('') + `<a href="#vm" class="nav-link vm-nav-link ${current === 'vm' ? 'active' : ''}" ${current === 'vm' ? 'aria-current="page"' : ''}><span class="nav-number">⌘</span><span class="nav-title">VM Lab</span><span class="nav-complete">↗</span></a>`;
+  $('#lesson-nav').innerHTML = weekNav(current) + `<details class="nav-extra" ${lessons.some(l=>l.id===current)?'open':''}><summary>บทฝึกเสริม · 7 หัวข้อ</summary>` + lessons.map((lesson) => `<a href="${lessonHref(lesson)}" class="nav-link ${current === lesson.id ? 'active' : ''}" ${current === lesson.id ? 'aria-current="page"' : ''}><span class="nav-number">${lesson.number}</span><span class="nav-title">${lesson.title}</span><span class="nav-complete">${state.completed.includes(lesson.id) ? '✓' : learning[lesson.id]?.practiced ? '◐' : learning[lesson.id]?.read ? '·' : ''}</span></a>`).join('') + '</details>' + `<a href="#vm" class="nav-link vm-nav-link ${current === 'vm' ? 'active' : ''}" ${current === 'vm' ? 'aria-current="page"' : ''}><span class="nav-number">⌘</span><span class="nav-title">VM Lab</span><span class="nav-complete">↗</span></a>`;
   $('#lesson-nav').insertAdjacentHTML('beforeend', `<a href="#project" class="nav-link ${current === 'project' ? 'active' : ''}" ${current === 'project' ? 'aria-current="page"' : ''}><span class="nav-number">↗</span><span class="nav-title">เส้นทางโปรเจกต์</span></a><a href="#troubleshooting" class="nav-link ${current === 'troubleshooting' ? 'active' : ''}" ${current === 'troubleshooting' ? 'aria-current="page"' : ''}><span class="nav-number">?</span><span class="nav-title">ฝึกแก้ปัญหา</span></a>`);
   $('#progress-count').textContent = `${state.completed.length} / ${lessons.length}`;
   $('#progress-fill').style.width = `${(state.completed.length / lessons.length) * 100}%`;
   $('.progress-track').setAttribute('aria-valuenow', String(state.completed.length));
 }
 
-function renderHome() {
+function renderTopics() {
   const next = lessons.find((lesson) => !state.completed.includes(lesson.id)) || lessons[0];
   $('#main').innerHTML = `
     <div class="home-page">
@@ -170,14 +171,16 @@ function renderSources() {
     ['Build secrets', 'https://docs.docker.com/build/building/secrets/'],
     ['GitHub Pages deployment', 'https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site']
   ];
-  $('#main').innerHTML = `<div class="sources-page"><a class="back-link" href="#home">← กลับหน้าหลัก</a><span class="section-kicker">REFERENCES</span><h1>แหล่งอ้างอิง</h1><p>เนื้อหาตรวจเทียบเอกสารทางการ ณ 3 ตุลาคม 2026 คำสั่งและเวอร์ชันอาจเปลี่ยนในอนาคต จึงควรดูเอกสารล่าสุดก่อนใช้ใน production</p><div class="source-list">${sources.map(([title,url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer"><span>${title}</span><span>↗</span></a>`).join('')}</div></div>`;
+  $('#main').innerHTML = `<div class="sources-page"><a class="back-link" href="#home">← กลับหน้าหลัก</a><span class="section-kicker">REFERENCES</span><h1>แหล่งอ้างอิง</h1><p>เนื้อหาตรวจเทียบเอกสารทางการ ณ 3 ตุลาคม 2026 คำสั่งและเวอร์ชันอาจเปลี่ยนในอนาคต จึงควรดูเอกสารล่าสุดก่อนใช้ใน production</p><h2>เอกสารคาบที่ใช้เรียบเรียง</h2><div class="week-source">${weeks.map(w=>`<p><strong>Week ${w.number} · ${w.date}</strong><br>${w.source}</p>`).join('')}</div><h2>เอกสารทางการสำหรับตรวจรายละเอียด</h2><div class="source-list">${sources.map(([title,url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer"><span>${title}</span><span>↗</span></a>`).join('')}</div></div>`;
 }
 
 function render() {
   const route = location.hash.slice(1).split('?')[0] || 'home';
   const lesson = lessons.find((item) => item.id === route);
   renderNav();
-  if (lesson) { renderLesson(lesson); }
+  if (weeks.some(w=>w.id===route)) renderWeek($('#main'),route);
+  else if (route==='topics' || route==='roadmap') renderTopics();
+  else if (lesson) { renderLesson(lesson); }
   else if (route === 'vm') {
     renderVMLab($('#main'));
 
@@ -185,8 +188,9 @@ function render() {
   else if (route === 'project') renderProject($('#main'));
   else if (route === 'troubleshooting') renderTroubleshooting($('#main'));
   else if (route === 'sources') renderSources();
-  else renderHome();
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  else renderWeeksHome($('#main'));
+  if(route==='roadmap') $('#roadmap')?.scrollIntoView({block:'start'});
+  else window.scrollTo({ top: 0, behavior: 'instant' });
   closeMenu();
 }
 

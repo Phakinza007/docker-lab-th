@@ -60,3 +60,14 @@ Compose รองรับ subset ที่ระบุใน VM: web build จ�
 - Lesson 1 checks a diagram snapshot exercise before command syntax is introduced. Lessons 2–5 use VM state and recent command evidence. Lessons 6–7 explicitly check conceptual simulations and transfer questions, and recommend finishing the foundation first. Real Docker practice is linked separately.
 - Dockerfile, named volume and Compose snippets match the simulator. PostgreSQL 16 is used in the teaching Compose sample; the simulated DB supports DNS/TCP only.
 - Learning records and reflections are included in JSON export/import. Older exports still load; previous quiz answers are retained, while task completion follows the new criteria.
+
+
+## Week-based classroom reading
+
+The default landing page follows INT134 G2 Class 6 (16 Sep), Class 7 (23 Sep), and Class 8 (30 Sep 2026). `weekly-course.mjs` contains original paraphrases based on the local lecture transcripts, with a problem → explanation → diagram → observation → recap sequence. These are not verbatim quotations or a replacement for the complete lecture/lab sheet.
+
+- Week 6: container model, process lifecycle, ports, moving the frontend.
+- Week 7: reproducible images, MySQL 8.4, bind mounts, named volumes, initialization and restart policy.
+- Week 8: backend images, context/configuration, bind address, user-defined network, ARG/ENV and startup processes.
+
+The seven topic exercises remain under “บทฝึกเสริม”; Compose/PostgreSQL simulator activities are identified separately from the MySQL classroom sequence. Every weekly command example is labeled as a VM-supported subset or real-Docker example. Raw transcripts are not published. Reading a Week does not automatically mark a topic exercise complete.
