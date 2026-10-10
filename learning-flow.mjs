@@ -15,7 +15,7 @@ export function validLearning(data) {
 export function lessonPassed(progress, quizCorrect) { return !!(quizCorrect && progress?.prediction!==undefined && progress?.read && progress?.practiced && progress?.task && progress?.reflected && progress?.reflection?.trim()); }
 const successful = (vm,pattern,output) => vm.history.some((entry,i) => entry.kind==='command' && pattern.test(entry.text) && vm.history[i+1]?.kind==='output' && (!output || output.test(vm.history[i+1].text)));
 export function checkTask(id,vm,progress={}) {
- if(tasks[id]?.transfer) { const evidence=progress.explored || []; const required=id==='mental-model'?['snapshot']:id==='workflow'?['dist','watch-sync','watch-rebuild']:['leaked','mounted']; return progress.practiced && required.every(v=>evidence.includes(v)) && progress.transfer===tasks[id].correct; }
+ if(tasks[id]?.transfer) { const evidence=progress.explored || []; const required=id==='mental-model'?['snapshot']:id==='workflow'?['dist','watch-sync','watch-rebuild']:['leaked','mounted']; return Boolean(progress.practiced && required.every(v=>evidence.includes(v)) && progress.transfer===tasks[id].correct); }
  if(!validVM(vm)) return false;
  const containers=Object.values(vm.containers);
  if(id==='cli') return containers.some(c=>c.status==='exited'&&c.logs.some(log=>/GET \/ HTTP/.test(log))) && successful(vm,/^docker logs /);
