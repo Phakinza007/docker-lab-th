@@ -1,4 +1,4 @@
-import { validLearning, LEARNING_KEY } from './learning-flow.mjs';
+import { validLearning, LEARNING_KEY } from './learning-flow.mjs?v=20261010-learning2';
 import { createVM, validVM } from './vm-engine.mjs?v=20261009-complete';
 export const LESSON_IDS = ['mental-model','cli','dockerfile','storage','compose','workflow','ship'];
 export function sessionSnapshot(vm, completed = [], answers = {}, troubleshooting = [], learning = {}) {

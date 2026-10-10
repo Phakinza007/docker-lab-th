@@ -1,4 +1,4 @@
-import { tasks } from './learning-flow.mjs';
+import { tasks } from './learning-flow.mjs?v=20261010-learning2';
 import { VM_STORAGE_KEY, PROJECT, MISSIONS, createVM, validVM, prompt, listFiles, validateDockerfile, saveFile, runVMCommand } from './vm-engine.mjs?v=20261009-complete';
 
 const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);

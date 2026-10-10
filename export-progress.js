@@ -1,4 +1,4 @@
-import { readSession, parseSession } from './vm-session.mjs?v=20261010-learning';
+import { readSession, parseSession } from './vm-session.mjs?v=20261010-learning2';
 const exportButton = document.querySelector('#export-progress');
 const importButton = document.createElement('button');
 importButton.type = 'button'; importButton.textContent = 'นำเข้างาน'; importButton.id = 'import-progress';

@@ -1,6 +1,6 @@
-import { renderLessonDiagram, resetLessonDiagram } from './lesson-diagrams.mjs?v=20261010-learning';
-import { LEARNING_KEY, tasks, validLearning, lessonPassed, checkTask, renderPrediction, renderLearningTask } from './learning-flow.mjs';
-import { renderVMLab, getVMState } from './vm-lab.mjs?v=20261010-learning';
+import { renderLessonDiagram, resetLessonDiagram } from './lesson-diagrams.mjs?v=20261010-learning2';
+import { LEARNING_KEY, tasks, validLearning, lessonPassed, checkTask, renderPrediction, renderLearningTask } from './learning-flow.mjs?v=20261010-learning2';
+import { renderVMLab, getVMState } from './vm-lab.mjs?v=20261010-learning2';
 import { renderProject, renderTroubleshooting, lessonProjectLink } from './curriculum.mjs';
 
 const lessons = [
